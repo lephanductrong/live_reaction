@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title> Facebook Reactions</title>
+	<style>
+        html {
+          box-sizing: border-box;
+          width: 100%;
+          height: 100%;
+          margin:0;
+          padding:0;
+          background: url("background.jpg") no-repeat center fixed; /* YOUR BACKGROUND URL HERE */
+          -webkit-background-size: cover; 
+          background-size: cover; 
+        }
+		*, *:before, *:after {
+		  box-sizing: inherit;
+		}
+		body{
+			margin: 0;
+            font-family: 'Open Sans', sans-serif;
+            color: #333;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.3)
+		}
+        header { 
+            text-align: center; 
+        }
+        header .logo { 
+            position: relative; 
+            margin:100px auto 20px; 
+            width:250px;
+        }
+        h1 { 
+            text-align: center; 
+            width:100%; 
+            font-size: 50px; 
+            padding: 30px 0; 
+            margin:0; 
+            color:#fff;
+        }
+		#wrap{
+			position: relative;
+			margin: 0px auto;
+			width: 1280px;
+			height: 720px;
+		}
+        .tc { 
+            text-align: center; 
+            font-size: 3rem; 
+            font-weight: bold; 
+        }
+        .wf { 
+            width: 28%; 
+        }
+        .wf img.illu {
+            width:80%;
+            display: block;
+            margin: 20px auto;
+            position: relative;
+        }
+        .wf img.emoji  {
+            width:34px;
+            display: inline-block;
+            margin-right:20px;
+        }
+        .wf { 
+            width: 29.3%; 
+            float:left; 
+            margin:30px 2%;
+            border:solid 1px #eee;
+            background:#fff;
+            border-radius: 8px;
+            position: relative; 
+            text-align: center; 
+        }
+        .likes,.happy,.sad,.fml,.angry,.shock{ height:200px;background-position: center 0px ; background-size: cover; background-repeat: no-repeat; }
+        .counter{ -webkit-text-stroke: 1px white;font-size:75px;}
+        .likes{background-image: url(shirt/like.jpg);}
+        .happy{background-image: url(shirt/love.jpg);}
+        .sad{background-image: url(shirt/sad.jpg);}
+        .fml{background-image: url(shirt/haha.jpg);}
+        .angry{background-image: url(shirt/angry.jpg);}
+        .shock{background-image: url(shirt/wow.jpg);}
+
+        span.emoji{
+                width: 62px;
+                display: inline-block;
+                height: 62px;
+                background: url(emojis/reactions.gif);
+                background-position: -37px -44px;
+                background-size: 539px 155px;
+                border-radius: 40px;
+            }
+            .happy .emoji{
+                background-position:  -118px -42px;
+            }
+            .sad .emoji{
+                background-position: -362px -43px;
+            }
+            .fml .emoji{
+                background-position: -199px -45px;
+            }
+            .angry .emoji{
+                background-position: -443px -43px;
+            }
+            .shock .emoji{
+                background-position: -280px -44px;
+            }
+	</style>
+</head>
+<body>
+    <header>
+        <h1>Facebook Live Reactions</h1> 
+    </header>
+    <!-- REACTIONS -->
+	<div class="tc wf likes"><span class="emoji"></span><span class="counter"></span></div>
+    <div class="tc wf happy"><span class="emoji"></span> <span class="counter"></span></div>
+    <div class="tc wf sad"><span class="emoji"></span><span class="counter"></span></div>
+    <div class="tc wf fml"><span class="emoji"></span><span class="counter"></span></div>
+    <div class="tc wf angry"><span class="emoji"></span><span class="counter"></span></div>
+    <div class="tc wf shock"><span class="emoji"></span><span class="counter"></span></div>
+
+    <script src="jquery.min.js"></script>
+    <script src="lodash.min.js"></script>
+    <script>
+    "use strict";
+    var access_token = 'TOKEN_KEY'; // Thay token của bạn vào đây. Cách tạo token: https://smashballoon.com/custom-facebook-feed/access-token/ 
+    var postID = '2068190330105115'; // Táng post ID vào đây 
+    var refreshTime = 5; // Refresh time in seconds
+    var defaultCount = 0; // Default count to start with
+
+    var reactions = ['LIKE', 'LOVE', 'WOW', 'HAHA', 'SAD', 'ANGRY'].map(function (e) {
+        var code = 'reactions_' + e.toLowerCase();
+        return 'reactions.type(' + e + ').limit(0).summary(total_count).as(' + code + ')'
+    }).join(',');
+
+    var	v1 = $('.likes .counter'),
+    	v2 = $('.happy .counter'),
+        v3 = $('.sad .counter'),
+        v4 = $('.fml .counter'),
+        v5 = $('.angry .counter'),
+        v6 = $('.shock .counter');
+
+    function refreshCounts() {
+        var url = 'https://graph.facebook.com/v2.8/?ids=' + postID + '&fields=' + reactions + '&access_token=' + access_token;
+    	$.getJSON(url, function(res){
+    		v1.text(defaultCount + res[postID].reactions_like.summary.total_count);
+    		v2.text(defaultCount + res[postID].reactions_love.summary.total_count);
+            v3.text(defaultCount + res[postID].reactions_sad.summary.total_count);
+            v4.text(defaultCount + res[postID].reactions_haha.summary.total_count);
+            v5.text(defaultCount + res[postID].reactions_angry.summary.total_count);
+            v6.text(defaultCount + res[postID].reactions_wow.summary.total_count);
+    	});
+    }
+
+    $(document).ready(function(){
+        setInterval(refreshCounts, refreshTime * 1000);
+        refreshCounts();
+    });
+    </script>
+</body>
+</html>
