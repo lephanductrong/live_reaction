@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title> Facebook Reactions</title>
+	<style>
+        html {
+          box-sizing: border-box;
+          width: 100%;
+          height: 100%;
+          margin:0;
+          padding:0;
+          background: url("background.jpg") no-repeat center fixed; /* YOUR BACKGROUND URL HERE */
+          -webkit-background-size: cover; 
+          background-size: cover; 
+        }
+		*, *:before, *:after {
+		  box-sizing: inherit;
+		}
+		body{
+			margin: 0;
+            font-family: 'Open Sans', sans-serif;
+            color: #333;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.3)
+		}
+        header { 
+            text-align: center; 
+        }
+        header .logo { 
+            position: relative; 
+            margin:100px auto 20px; 
+            width:250px;
+        }
+        h1 { 
+            text-align: center; 
+            width:100%; 
+            font-size: 50px; 
+            padding: 30px 0; 
+            margin:0; 
+            color:#fff;
+        }
+		#wrap{
+			position: relative;
+			margin: 0px auto;
+			width: 1280px;
+			height: 720px;
+		}
+        .tc { 
+            text-align: center; 
+            font-size: 3rem; 
+            font-weight: bold; 
+        }
+        .wf { 
+            width: 28%; 
+        }
+        .wf img.illu {
+            width:80%;
+            display: block;
+            margin: 20px auto;
+            position: relative;
+        }
+        .wf img.emoji  {
+            width:34px;
+            display: inline-block;
+            margin-right:20px;
+        }
+        .wf { 
+            width: 29.3%; 
+            float:left; 
+            margin:30px 2%;
+            border:solid 1px #eee;
+            background:#fff;
+            border-radius: 8px;
+            position: relative; 
+            text-align: center; 
+        }
+       .gettoken{text-align: center; color: #fff;}
+       .gettoken a{color:#fff;}
+	</style>
+</head>
+<body>
+    <header>
+        <h1>Facebook Live Reactions</h1> 
+    </header>
+    <!-- REACTIONS -->
+   <div class="gettoken">
+     AppID	<input type="text" id="app_id">
+   	App Secret <input type="text" id="app_secret">
+   	<a href="" id="gettoken"></a>
+   </div>
+
+    <script src="jquery.min.js"></script>
+    <script src="lodash.min.js"></script>
+    <script>
+    "use strict";
+  
+    $(document).ready(function(){
+        $('#app_id,#app_secret').on('change',function(){
+        	if($('#app_id').val()!=''&&$('#app_secret').val()!=''){
+        		$('#gettoken').attr('href','https://graph.facebook.com/v2.8/oauth/access_token?client_id='+$('#app_id').val()+'&client_secret='+$('#app_secret').val()+'&grant_type=client_credentials').html(' Get token');
+        	}
+        	else $('#gettoken').html('');
+        })
+    });
+    </script>
+</body>
+</html>
